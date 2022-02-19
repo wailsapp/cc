@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    paths:
+      - '**.linux-amd64'
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile.linux-amd64 --tag wailsapp/cc:linux-amd64
+    - name: Push the latest Docker image
+      run: docker push wailsapp/cc:linux-amd64
