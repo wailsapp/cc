@@ -1,0 +1,21 @@
+FROM golang:1.18beta2
+LABEL os=linux
+LABEL arch=arm64
+
+ENV GOOS=linux
+ENV GOARCH=arm64
+ENV CGO_ENABLED=1
+ENV CC=aarch64-linux-gnu-gcc
+ENV PATH="/go/bin/${GOOS}_${GOARCH}:${PATH}"
+ENV PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
+
+# install build & runtime dependencies
+RUN dpkg --add-architecture arm64 \
+    && apt update \
+    && apt install -f -o Dpkg::Options::="--force-overwrite" -y --no-install-recommends \
+        gcc-aarch64-linux-gnu \
+        libc6-dev-arm64-cross \
+        pkg-config \
+        libwebkit2gtk-4.0-dev:$arch \
+        libgtk-3-dev:$arch \
+    && rm -rf /var/lib/apt/lists/*
