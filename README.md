@@ -1,4 +1,4 @@
-# wails-cross
+# cc
 Dockerfiles for Cross Compiling Wails Applications
 
 ## Image build
